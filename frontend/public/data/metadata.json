@@ -1,0 +1,17 @@
+{
+  "total_seasons": 5,
+  "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "first_season": 2021,
+  "latest_season": 2025,
+  "total_teams": 12,
+  "total_owners": 14,
+  "total_matchups": 510,
+  "processed_at": "2026-01-05T14:31:56.687103",
+  "league_name": "FoolsBallers"
+}
