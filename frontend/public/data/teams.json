@@ -2,12 +2,12 @@
   "1": {
     "team_id": 1,
     "team_names": [
+      "GalaxyBrian",
       "Jah Fury and The AlgoRiddimz",
       "\ud83d\udd25 STR\ud83c\udfb1\ud83d\udd25",
-      "The Bench Ornaments ",
-      "GalaxyBrian"
+      "The Bench Ornaments "
     ],
-    "current_name": "GalaxyBrian",
+    "current_name": "The Bench Ornaments ",
     "owners": [
       "Jeffrey Crosswhite"
     ],
@@ -93,9 +93,9 @@
   "2": {
     "team_id": 2,
     "team_names": [
-      "Thankful4This Heineicke",
       "White Walkers III",
       "Almond Ron",
+      "Thankful4This Heineicke",
       "Tee HeGohwns"
     ],
     "current_name": "Tee HeGohwns",
@@ -184,10 +184,10 @@
   "3": {
     "team_id": 3,
     "team_names": [
-      "Oh the HugeManatee!!",
-      "Myld Stallynz"
+      "Myld Stallynz",
+      "Oh the HugeManatee!!"
     ],
-    "current_name": "Myld Stallynz",
+    "current_name": "Oh the HugeManatee!!",
     "owners": [
       "Jeremy Miller"
     ],
@@ -273,10 +273,10 @@
   "4": {
     "team_id": 4,
     "team_names": [
-      "Shanny's Dandies ",
-      "Shanahan's ManHands "
+      "Shanahan's ManHands ",
+      "Shanny's Dandies "
     ],
-    "current_name": "Shanahan's ManHands ",
+    "current_name": "Shanny's Dandies ",
     "owners": [
       "Tim G"
     ],
@@ -363,10 +363,10 @@
     "team_id": 5,
     "team_names": [
       "Next Door Nabers",
-      "Muddy Puddles",
-      "Bo Knows Loser Bracket"
+      "Bo Knows Loser Bracket",
+      "Muddy Puddles"
     ],
-    "current_name": "Bo Knows Loser Bracket",
+    "current_name": "Muddy Puddles",
     "owners": [
       "Casey Davis"
     ],
@@ -452,10 +452,10 @@
   "6": {
     "team_id": 6,
     "team_names": [
-      "Truck Sticks",
-      "The Truck Sticks"
+      "The Truck Sticks",
+      "Truck Sticks"
     ],
-    "current_name": "The Truck Sticks",
+    "current_name": "Truck Sticks",
     "owners": [
       "Nick Verville"
     ],
@@ -543,10 +543,10 @@
     "team_names": [
       "- Off Constantly",
       "Off Constantly Off Constantly",
-      "Off Constantly",
-      "Embrace the Suck"
+      "Embrace the Suck",
+      "Off Constantly"
     ],
-    "current_name": "Embrace the Suck",
+    "current_name": "Off Constantly",
     "owners": [
       "Henry Bustamante"
     ],
@@ -632,12 +632,12 @@
   "9": {
     "team_id": 9,
     "team_names": [
-      "Horseshoe Heroes",
       "Colts 45",
-      "Olave Garden",
-      "Matty Ice Ice Baby"
+      "Horseshoe Heroes",
+      "Matty Ice Ice Baby",
+      "Olave Garden"
     ],
-    "current_name": "Matty Ice Ice Baby",
+    "current_name": "Olave Garden",
     "owners": [
       "Aaron Van Schyndel"
     ],
@@ -723,10 +723,10 @@
   "10": {
     "team_id": 10,
     "team_names": [
-      "Portland T-Diddys",
-      "Portland Trophy Dads",
       "Amon to HiggnKiss",
       "Participation Trophy Dads",
+      "Portland Trophy Dads",
+      "Portland T-Diddys",
       "Higgy Hate Me "
     ],
     "current_name": "Higgy Hate Me ",
@@ -994,15 +994,15 @@
   "13": {
     "team_id": 13,
     "team_names": [
-      "Lord of Wrath",
-      "Santa Clara Football Team"
+      "Santa Clara Football Team",
+      "Lord of Wrath"
     ],
-    "current_name": "Santa Clara Football Team",
+    "current_name": "Lord of Wrath",
     "owners": [
-      "Alex McRobbie",
-      "Derek Shaw"
+      "Derek Shaw",
+      "Alex McRobbie"
     ],
-    "current_owner": "Derek Shaw",
+    "current_owner": "Alex McRobbie",
     "seasons_active": 5,
     "seasons": [
       {

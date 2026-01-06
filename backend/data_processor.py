@@ -1039,9 +1039,12 @@ class FantasyDataProcessor:
 
         # For best picks: late round picks (rounds 7+) that performed well
         # These are the steals - players picked late who produced
+        # Only include WR, RB, TE (exclude QB, K, D/ST)
         best_picks = [
             pick for pick in all_picks
-            if pick['round_num'] >= 7 and pick['total_points'] > 50  # At least 50 points scored
+            if pick['round_num'] >= 7
+            and pick['total_points'] > 50  # At least 50 points scored
+            and pick.get('position') in ['WR', 'RB', 'TE']  # Only skill positions
         ]
         self.processed_data['best_draft_picks'] = best_picks
 
