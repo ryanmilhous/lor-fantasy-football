@@ -1,25 +1,30 @@
 import { useState, useEffect } from 'react';
 import apiService from '../services/api';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 function Seasons() {
   const [standings, setStandings] = useState([]);
-  const [optimalLineups, setOptimalLineups] = useState([]);
+  const [owners, setOwners] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedOwner, setSelectedOwner] = useState(null);
   const [years, setYears] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [seasonsResponse, standingsResponse, optimalResponse] = await Promise.all([
+        const [seasonsResponse, standingsResponse, ownersResponse] = await Promise.all([
           apiService.getSeasons(),
           apiService.getAllStandings(),
-          apiService.getOptimalLineups(),
+          apiService.getOwners(),
         ]);
         setYears(seasonsResponse.data.years);
         setStandings(standingsResponse.data);
-        setOptimalLineups(optimalResponse.data);
+        setOwners(ownersResponse.data);
         setSelectedYear(seasonsResponse.data.latest_season);
+        if (ownersResponse.data.length > 0) {
+          setSelectedOwner(ownersResponse.data[0].owner);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -116,104 +121,107 @@ function Seasons() {
         </div>
       </div>
 
-      {/* Optimal Lineup Analysis */}
-      {optimalLineups.filter(ol => ol.year === selectedYear).length > 0 && (
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500/10 via-yellow-500/10 to-red-500/10 p-1">
-          <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-6 flex items-center space-x-3">
-              <span>📊</span>
-              <span>Optimal Lineup Analysis</span>
-            </h2>
+      {/* Owner Wins/Losses Over Time */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-500/10 via-blue-500/10 to-purple-500/10 p-1">
+        <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-6 flex items-center space-x-3">
+            <span>📈</span>
+            <span>Wins & Losses Over Time</span>
+          </h2>
 
-            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-l-4 border-blue-500 p-4 rounded-lg backdrop-blur-sm mb-6">
-              <p className="text-sm text-blue-300 font-medium">
-                <strong>Note:</strong> Optimal lineup data is only available from 2019-present. This shows how many points you left on the bench each week.
-              </p>
-            </div>
-
-            {(() => {
-              // Calculate season totals for each owner
-              const yearLineups = optimalLineups.filter(ol => ol.year === selectedYear);
-              const ownerStats = {};
-
-              yearLineups.forEach(lineup => {
-                if (!ownerStats[lineup.owner]) {
-                  ownerStats[lineup.owner] = {
-                    owner: lineup.owner,
-                    actual_points: 0,
-                    optimal_points: 0,
-                    bench_points: 0,
-                    weeks: 0
-                  };
-                }
-                ownerStats[lineup.owner].actual_points += lineup.actual_points;
-                ownerStats[lineup.owner].optimal_points += lineup.optimal_points;
-                ownerStats[lineup.owner].bench_points += lineup.bench_points;
-                ownerStats[lineup.owner].weeks += 1;
-              });
-
-              const sortedStats = Object.values(ownerStats).sort((a, b) =>
-                (b.optimal_points - b.actual_points) - (a.optimal_points - a.actual_points)
-              );
-
-              return (
-                <div className="overflow-x-auto rounded-xl">
-                  <table className="min-w-full">
-                    <thead>
-                      <tr className="border-b border-white/10">
-                        <th className="px-6 py-4 text-left text-xs font-bold text-orange-400 uppercase tracking-wider">Owner</th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-orange-400 uppercase tracking-wider">Actual Points</th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-orange-400 uppercase tracking-wider">Optimal Points</th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-orange-400 uppercase tracking-wider">Left on Bench</th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-orange-400 uppercase tracking-wider">Efficiency</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {sortedStats.map((stat, index) => {
-                        const efficiency = (stat.actual_points / stat.optimal_points * 100).toFixed(1);
-                        const leftOnBench = stat.optimal_points - stat.actual_points;
-
-                        return (
-                          <tr key={index} className="hover:bg-white/5 transition-colors duration-200">
-                            <td className="px-6 py-4 whitespace-nowrap text-white font-semibold">
-                              {stat.owner}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-green-400 font-semibold">
-                              {stat.actual_points.toFixed(2)}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-blue-400 font-semibold">
-                              {stat.optimal_points.toFixed(2)}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="text-orange-400 font-semibold">
-                                {leftOnBench.toFixed(2)}
-                              </span>
-                              <span className="text-xs text-white/50 ml-2">
-                                ({(leftOnBench / stat.weeks).toFixed(2)}/week)
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center space-x-2">
-                                <div className="flex-1 bg-white/10 rounded-full h-2 max-w-[100px]">
-                                  <div
-                                    className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all duration-500"
-                                    style={{ width: `${efficiency}%` }}
-                                  ></div>
-                                </div>
-                                <span className="text-white/70 font-semibold text-sm">{efficiency}%</span>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              );
-            })()}
+          {/* Owner Selector */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-blue-400 mb-2 uppercase tracking-wider">Select Owner</label>
+            <select
+              value={selectedOwner || ''}
+              onChange={(e) => setSelectedOwner(e.target.value)}
+              className="w-full md:w-64 px-4 py-3 bg-slate-800/50 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            >
+              {owners.map(owner => (
+                <option key={owner.owner} value={owner.owner}>{owner.owner}</option>
+              ))}
+            </select>
           </div>
+
+          {/* Chart */}
+          {(() => {
+            // Prepare data for selected owner
+            const ownerSeasonData = standings
+              .filter(s => s.owner === selectedOwner)
+              .sort((a, b) => a.year - b.year)
+              .map(s => ({
+                year: s.year,
+                wins: s.wins,
+                losses: s.losses,
+                standing: s.standing,
+                finalStanding: s.final_standing,
+                playoffFinish: s.final_standing === 1 ? '🥇 Champion' :
+                               s.final_standing === 2 ? '🥈 Runner-up' :
+                               s.final_standing === 3 ? '🥉 3rd Place' :
+                               s.playoff_seed ? 'Made playoffs (outside top 3)' : 'Missed playoffs'
+              }));
+
+            // Custom tooltip
+            const CustomTooltip = ({ active, payload }) => {
+              if (active && payload && payload.length) {
+                const data = payload[0].payload;
+                return (
+                  <div className="bg-slate-800/95 border border-white/20 rounded-lg p-4 shadow-xl">
+                    <p className="text-white font-bold text-lg mb-2">{data.year} Season</p>
+                    <p className="text-green-400 font-semibold">Wins: {data.wins}</p>
+                    <p className="text-red-400 font-semibold">Losses: {data.losses}</p>
+                    <p className="text-blue-400 mt-2">Regular Season: #{data.standing}</p>
+                    <p className="text-yellow-400">{data.playoffFinish}</p>
+                  </div>
+                );
+              }
+              return null;
+            };
+
+            return (
+              <div className="w-full h-96">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={ownerSeasonData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                    <XAxis
+                      dataKey="year"
+                      stroke="#ffffff80"
+                      style={{ fontSize: '14px', fontWeight: 'bold' }}
+                    />
+                    <YAxis
+                      stroke="#ffffff80"
+                      style={{ fontSize: '14px', fontWeight: 'bold' }}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend
+                      wrapperStyle={{ paddingTop: '20px' }}
+                      iconType="line"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="wins"
+                      stroke="#10b981"
+                      strokeWidth={3}
+                      name="Wins"
+                      dot={{ fill: '#10b981', r: 6 }}
+                      activeDot={{ r: 8 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="losses"
+                      stroke="#ef4444"
+                      strokeWidth={3}
+                      name="Losses"
+                      dot={{ fill: '#ef4444', r: 6 }}
+                      activeDot={{ r: 8 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            );
+          })()}
         </div>
-      )}
+      </div>
     </div>
   );
 }
